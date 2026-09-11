@@ -1,0 +1,19 @@
+{
+  "name": "jarvis-assistant",
+  "version": "1.0.0",
+  "description": "Jarvis - Autonomous AI Voice Assistant & Full Android Device Controller (Capacitor UI + Termux Python backend)",
+  "private": true,
+  "scripts": {
+    "sync": "cap sync android",
+    "add:android": "cap add android",
+    "build:android": "cd android && ./gradlew assembleDebug",
+    "open:android": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}

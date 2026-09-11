@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <title>Jarvis</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span class="status-dot" id="connectionDot"></span>
+        <span class="status-text" id="connectionText">Disconnected</span>
+      </div>
+      <div class="status-right">
+        <span class="battery-icon" id="batteryIcon"></span>
+        <span class="battery-text" id="batteryText">--%</span>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-logo">
+        <div class="logo-glow"></div>
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="header-title">
+        <h1>VOICE AGENT</h1>
+        <p class="subtitle">AI CONTROL CENTER</p>
+      </div>
+      <button class="settings-btn" id="settingsBtn" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Agent Status Card -->
+      <section class="card agent-status-card">
+        <div class="card-header">
+          <span class="card-label">AGENT STATUS</span>
+          <span class="card-badge" id="agentBadge">OFFLINE</span>
+        </div>
+        <div class="agent-visual">
+          <div class="agent-ring" id="agentRing"></div>
+          <div class="agent-core" id="agentCore">
+            <div class="core-pulse"></div>
+          </div>
+        </div>
+        <div class="agent-info">
+          <div class="info-row">
+            <span class="info-label">Uptime</span>
+            <span class="info-value" id="uptimeValue">00:00:00</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Commands</span>
+            <span class="info-value" id="commandCount">0</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Response</span>
+            <span class="info-value" id="responseTime">--ms</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Control Buttons -->
+      <section class="control-section">
+        <button class="control-btn start-btn" id="startBtn">
+          <div class="btn-glow"></div>
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <span class="btn-text">START AGENT</span>
+          <span class="btn-sub">Initialize AI Service</span>
+        </button>
+        <button class="control-btn stop-btn disabled" id="stopBtn" disabled>
+          <div class="btn-glow"></div>
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 6h12v12H6z"/>
+          </svg>
+          <span class="btn-text">STOP AGENT</span>
+          <span class="btn-sub">Terminate Service</span>
+        </button>
+      </section>
+
+      <!-- Avatar Section -->
+      <section class="card avatar-card">
+        <div class="card-header">
+          <span class="card-label">AVATAR</span>
+          <div class="card-actions">
+            <button class="icon-btn" id="uploadAvatarBtn" title="Upload">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </button>
+            <button class="icon-btn" id="deleteAvatarBtn" title="Delete">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="avatar-container">
+          <div class="avatar-frame">
+            <img id="avatarImage" src="assets/avatar-default.png" alt="Agent Avatar" />
+            <div class="avatar-overlay">
+              <span class="avatar-status" id="avatarStatus">● LIVE</span>
+            </div>
+          </div>
+          <div class="avatar-info">
+            <input type="text" class="agent-name-input" id="agentNameInput" placeholder="Agent Name" value="NEXUS-7" />
+            <div class="avatar-mode">
+              <span class="mode-label">Mode:</span>
+              <select class="mode-select" id="modeSelect">
+                <option value="responsive">Responsive</option>
+                <option value="proactive">Proactive</option>
+                <option value="silent">Silent</option>
+              </select>
+            </div>
+            <div class="avatar-size-row">
+              <span class="mode-label">Size:</span>
+              <input type="range" id="avatarSizeRange" min="50" max="160" value="80" />
+            </div>
+          </div>
+        </div>
+        <input type="file" id="avatarFileInput" accept="image/png,image/gif,image/jpeg,image/webp" style="display:none" />
+      </section>
+
+      <!-- Talk to Jarvis -->
+      <section class="card chat-card">
+        <div class="card-header">
+          <span class="card-label">TALK TO JARVIS</span>
+        </div>
+        <div class="chat-log" id="chatLog"></div>
+        <div class="chat-input-row">
+          <button class="icon-btn mic-toggle-btn" id="micBtn" title="Voice input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </button>
+          <input type="text" class="chat-text-input" id="chatInput" placeholder="Type a command or tap the mic…" />
+          <button class="send-btn" id="chatSendBtn">Send</button>
+        </div>
+      </section>
+
+      <!-- Permissions Card -->
+      <section class="card permissions-card">
+        <div class="card-header">
+          <span class="card-label">PERMISSIONS</span>
+          <button class="check-all-btn" id="checkAllBtn">CHECK ALL</button>
+        </div>
+        <div class="permissions-list">
+          <div class="perm-item" data-perm="root">
+            <div class="perm-icon root-icon">⚡</div>
+            <div class="perm-info">
+              <div class="perm-name">Root Access</div>
+              <div class="perm-desc">Superuser privileges</div>
+            </div>
+            <div class="perm-status" id="perm-root">
+              <span class="status-badge pending">PENDING</span>
+            </div>
+          </div>
+          <div class="perm-item" data-perm="overlay">
+            <div class="perm-icon overlay-icon">🔲</div>
+            <div class="perm-info">
+              <div class="perm-name">Display Overlay</div>
+              <div class="perm-desc">Draw over other apps</div>
+            </div>
+            <div class="perm-status" id="perm-overlay">
+              <span class="status-badge pending">PENDING</span>
+            </div>
+          </div>
+          <div class="perm-item" data-perm="accessibility">
+            <div class="perm-icon access-icon">♿</div>
+            <div class="perm-info">
+              <div class="perm-name">Accessibility</div>
+              <div class="perm-desc">Screen reader service</div>
+            </div>
+            <div class="perm-status" id="perm-accessibility">
+
+              <span class="status-badge pending">PENDING</span>
+            </div>
+          </div>
+          <div class="perm-item" data-perm="mic">
+            <div class="perm-icon mic-icon">🎤</div>
+            <div class="perm-info">
+              <div class="perm-name">Microphone</div>
+              <div class="perm-desc">Voice input access</div>
+            </div>
+            <div class="perm-status" id="perm-mic">
+              <span class="status-badge pending">PENDING</span>
+            </div>
+          </div>
+          <div class="perm-item" data-perm="storage">
+            <div class="perm-icon storage-icon"></div>
+            <div class="perm-info">
+              <div class="perm-name">Storage</div>
+              <div class="perm-desc">File read/write</div>
+            </div>
+            <div class="perm-status" id="perm-storage">
+              <span class="status-badge pending">PENDING</span>
+            </div>
+          </div>
+          <div class="perm-item" data-perm="battery">
+            <div class="perm-icon battery-icon">🔋</div>
+            <div class="perm-info">
+              <div class="perm-name">Battery Optimization</div>
+              <div class="perm-desc">Ignore power saving</div>
+            </div>
+            <div class="perm-status" id="perm-battery">
+              <span class="status-badge pending">PENDING</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- API Bridge Status -->
+      <section class="card bridge-card">
+        <div class="card-header">
+          <span class="card-label">TERMUX BRIDGE</span>
+          <span class="bridge-url">127.0.0.1:5000</span>
+        </div>
+        <div class="bridge-stats">
+          <div class="stat-box">
+            <div class="stat-value" id="statRequests">0</div>
+            <div class="stat-label">Requests</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="statErrors">0</div>
+            <div class="stat-label">Errors</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="statLatency">0ms</div>
+            <div class="stat-label">Latency</div>
+          </div>
+        </div>
+        <div class="bridge-log" id="bridgeLog">
+          <div class="log-entry info">[System] Dashboard initialized</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Settings</h2>
+          <button class="modal-close" id="closeSettingsBtn">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="setting-group">
+            <label class="setting-label">API Endpoint</label>
+            <input type="text" class="setting-input" id="apiEndpoint" value="http://127.0.0.1:5000" />
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Auto-start Agent</label>
+            <label class="toggle">
+              <input type="checkbox" id="autoStartToggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Enable Floating Overlay</label>
+            <label class="toggle">
+              <input type="checkbox" id="overlayToggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Always Listen (Background)</label>
+            <label class="toggle">
+              <input type="checkbox" id="backgroundListenToggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="setting-hint">Say the agent's name (set above under Avatar) to wake it up, even when the app is closed. Runs as a quiet background service — no popups.</p>
+          <div class="setting-group">
+            <label class="setting-label">Voice Language</label>
+            <select class="setting-select" id="languageSelect">
+              <option value="en-US">English (US)</option>
+              <option value="en-GB">English (UK)</option>
+              <option value="hi-IN">Hindi</option>
+              <option value="es-ES">Spanish</option>
+            </select>
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Response Speed</label>
+            <input type="range" class="setting-range" id="speedRange" min="1" max="10" value="5" />
+            <div class="range-labels">
+              <span>Slow</span>
+              <span>Fast</span>
+            </div>
+          </div>
+          <button class="save-settings-btn" id="saveSettingsBtn">Save Settings</button>
+          <button class="reset-settings-btn" id="resetSettingsBtn">Reset All Data</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+  </div>
+
+
+  <script src="js/storage.js"></script>
+  <script src="js/permissions.js"></script>
+  <script src="js/bridge.js"></script>
+  <script src="js/overlay.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
